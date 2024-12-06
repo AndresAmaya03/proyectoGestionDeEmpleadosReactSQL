@@ -53,6 +53,49 @@ app.get(
     })
 )
 
+//PUT
+app.put(
+  "/update", 
+  asyncHandler(async (req, res) => {
+    const { id, name, age, country, charge, agesOnCharge } = req.body;
+
+    const sqlUpdate = 'UPDATE employee SET name=?, age=?, country=?, charge=?, agesOnCharge=?  WHERE id=?';
+
+    await new Promise((resolve, reject) => {
+      db.query(sqlUpdate, [name, age, country, charge, agesOnCharge, id], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+    res.status(201).json({ message: 'Employee updated successfully' });
+  })
+);
+
+//DELETE
+app.delete(
+  "/delete/:id", 
+  asyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const sqlUpdate = 'DELETE FROM employee WHERE id=?';
+
+    await new Promise((resolve, reject) => {
+      db.query(sqlUpdate, [id], (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    });
+    res.status(201).json({ message: 'Employee deleted successfully' });
+  })
+);
+
+
 
 
 app.listen(3001, () => {
